@@ -20,16 +20,16 @@ create table CompanyCustomers (
 create table PrivateCustomers (
 	CustomerID int not null primary key foreign key references Customers(CustomerID),
 	FirstName varchar(30) not null,
-	LastName varchar(50) not null,
-	PESEL char(11) unique not null
+	LastName varchar(50) not null
 )
 
 create table Conferences (
 	ConferenceID int not null primary key identity(0,1),
-	CustomerID int not null foreign key references Customers(CustomerID),
+	Name varchar(100) not null,
+	ParticipantsLimit int not null,
 	StartDate date not null,
 	EndDate date not null,
-	StudentDiscount real not null check(StudentDiscount between 0 and 1)
+	StudentDiscount real check(StudentDiscount between 0 and 1)
 )
 
 create table Employees (
@@ -50,8 +50,7 @@ create table ConferenceDay (
 	DayID int not null primary key identity(0,1),
 	ConferenceID int not null foreign key references Conferences(ConferenceID),
 	Day date not null,
-	DayOrdinal smallint not null,
-	ParticipantsLimit int not null
+	DayOrdinal smallint not null
 )
 
 create table Participants (
@@ -106,11 +105,12 @@ create table ConferenceParticipants (
 	foreign key (ParticipantID) references Participants(ParticipantID)
 )
 
-create table ConferencePricetable (
-	ConferenceDayID int not null primary key foreign key references ConferenceDay(DayID),
-	PriceValidFrom date not null,
-	PriceValidity int not null check(PriceValidity >= 0),  -- 0 czyli tylko dziœ, 1 czyli do jutra itd.
-	Price money not null
+create table ConferenceDiscounts (
+	ConferenceID int not null foreign key references Conferences(ConferenceID),
+	DiscountID int not null identity(0,1), 
+	Discount real not null,
+	MinimumDaysBeforeConference int not null,
+	primary key clustered (ConferenceID, DiscountID)
 )
 
 create table ConferenceDayReservation (
