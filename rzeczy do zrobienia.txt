@@ -1,0 +1,30 @@
+1. Dodaj uczestnika (firmowego/bez firmy)
+2. Dodaj klienta prywatnego (z wyszukiwaniem wœród uczestników po telefonie)
+3. Powi¹¿ uczestnika z firm¹
+4. Dodaj region w kraju + wyszukiwanie
+5. Dodaj miasto w regionie + wyszukiwanie
+6. Dodaj w³asnego pracownika
+7. Dodaj konferencjê
+8. Powi¹¿ pracownika z konferencj¹
+9. Dodaj próg cenowy do konferencji (ze sprawdzaniem innych przedzia³ów cen i daty)
+10. Utwórz rezerwacjê na konferencjê
+11. Zap³aæ za rezerwacjê na konferencjê
+12. Dodaj rezerwacjê na dany dzieñ
+13. Dodaj warsztat w dniu
+14. Dodaj uczestnika do dnia konferencji
+15. Dodaj uczestnika do warsztatu
+16. Nowa rezerwacja na warsztat
+17. Wyszukiwanie
+- firmy (po nipie, nazwie)
+- uczestnika (po imieniu i nazwisku, telefonie, e-mailu)
+- klienta (jw)
+- ew. po adresie, mieœcie itd.
+18. wszyscy Uczestnicy konferencji, warsztatów po id
+19. Widok z p³atnoœciami
+20. Konferencje zamówione (wiêcej ni¿ 2 tygonie temu/ogólnie) bez uzupe³nionych uczestników
+21. Konferencje nieop³acone - widok
+22. Usuwanie nieop³aconych w terminie konferencji
+23. Klienci posortowani wed³ug iloœci op³aconych rezerwacji
+24. Faktura za dan¹ konferencjê
+25. Liczba wolnych miejsc na dany warsztat/konferencjê
+26. (anulowanie konferencji, warsztatu)

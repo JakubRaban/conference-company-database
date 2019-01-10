@@ -29,13 +29,6 @@ create table Participants (
 )
 
 --utw
-create table PrivateCustomers (
-	CustomerID int not null foreign key references Customers(CustomerID),
-	ParticipantID int not null foreign key references Participants(ParticipantID),
-	primary key clustered (CustomerID, ParticipantID)
-)
-
---utw
 create table Student (
 	ParticipantID int not null primary key foreign key references Participants(ParticipantID),
 	StudentCardNumber varchar(10) not null
@@ -49,8 +42,9 @@ create table EmployeesOfCompanies (
 )
 
 --utw
-create table ConferenceOrders (
-	OrderID int not null primary key identity(0,1),
+create table ConferenceReservations (
+	ReservationID int not null primary key identity(0,1),
+	ConferenceID int not null foreign key references Conferences(ConferenceID),
 	CustomerID int not null foreign key references Customers(CustomerID),
 	DateOrdered date not null,
 	DatePaid date
@@ -137,7 +131,7 @@ create table ConferenceDayWorkshops (
 	WorkshopID int not null foreign key references Workshops(WorkshopID),
 	StartTime time not null,
 	EndTime time not null,
-	Price money not null,
+	Price money,
 	ParticipantsLimit int,
 )
 
@@ -145,6 +139,7 @@ create table ConferenceDayWorkshops (
 create table WorkshopReservation (
 	WorkshopReservationID int not null primary key identity(0,1),
 	ConferenceDayWorkshopID int not null foreign key references ConferenceDayWorkshops(ConferenceDayWorkshopID),
+	ConferenceDayReservationID int not null foreign key references ConferenceDayReservation(DayReservationID),
 	ReservedSeats int not null
 )
 
@@ -156,3 +151,48 @@ create table WorkshopParticipants (
 	foreign key (ConferenceDayParticipantID) references ConferenceDayParticipants(ConferenceDayParticipantID),
 	foreign key (ConferenceDayWorkshopID) references ConferenceDayWorkshops(ConferenceDayWorkshopID)
 )
+
+create table Addresses (
+	AddressID int not null primary key identity(0,1),
+	Street varchar(80),
+	HouseNumber varchar(5),
+	AppartmentNumber int,
+	City varchar(40),
+	PostalCode char(6) check(PostalCode like '[0-9][0-9]-[0-9][0-9][0-9]')
+)
+
+create table Countries (
+	CountryID int not null primary key identity(0,1),
+	CountryName varchar(80) not null,
+)
+
+create table Regions (
+	RegionID int not null primary key identity(0,1),
+	RegionName varchar(80) not null,
+	CountryID int not null foreign key references Countries(CountryID)
+)
+
+create table Cities (
+	CityID int not null primary key identity(0,1),
+	CityName varchar(80) not null,
+	RegionID int not null foreign key references Regions(RegionID)
+)
+
+create table PrivateCustomers (
+	CustomerID int not null primary key foreign key references Customers(CustomerID),
+	ParticipantID int not null foreign key references Participants(ParticipantID)
+)
+
+select * from Participants
+inner join PrivateCustomers
+	on Participants.ParticipantID = PrivateCustomers.ParticipantID
+inner join Customers
+	on Customers.CustomerID = PrivateCustomers.CustomerID
+inner join Addresses
+	on Addresses.AddressID = Customers.AddressID
+inner join Cities
+	on Addresses.CityID = Cities.CityID
+inner join Regions
+	on Cities.RegionID = Regions.RegionID
+inner join Countries
+	on Regions.CountryID = Countries.CountryID
