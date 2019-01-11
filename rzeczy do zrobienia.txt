@@ -1,15 +1,15 @@
 1. Dodaj uczestnika (firmowego/bez firmy)
-2. Dodaj klienta prywatnego (z wyszukiwaniem wœród uczestników po telefonie)
-3. Powi¹¿ uczestnika z firm¹
+2. Dodaj klienta prywatnego (z wyszukiwaniem wÅ›rÃ³d uczestnikÃ³w po telefonie)
+3. PowiÄ…Å¼ uczestnika z firmÄ…
 4. Dodaj region w kraju + wyszukiwanie
-5. Dodaj miasto w regionie + wyszukiwanie
-6. Dodaj w³asnego pracownika
-7. Dodaj konferencjê
-8. Powi¹¿ pracownika z konferencj¹
-9. Dodaj próg cenowy do konferencji (ze sprawdzaniem innych przedzia³ów cen i daty)
-10. Utwórz rezerwacjê na konferencjê
-11. Zap³aæ za rezerwacjê na konferencjê
-12. Dodaj rezerwacjê na dany dzieñ
+5. (ja to zrobiÄ™) Dodaj miasto w regionie + wyszukiwanie 
+6. Dodaj wÅ‚asnego pracownika
+7. Dodaj konferencjÄ™
+8. PowiÄ…Å¼ pracownika z konferencjÄ…
+9. Dodaj prÃ³g cenowy do konferencji (ze sprawdzaniem innych przedziaÅ‚Ã³w cen i daty)
+10. UtwÃ³rz rezerwacjÄ™ na konferencjÄ™
+11. ZapÅ‚aÄ‡ za rezerwacjÄ™ na konferencjÄ™
+12. Dodaj rezerwacjÄ™ na dany dzieÅ„
 13. Dodaj warsztat w dniu
 14. Dodaj uczestnika do dnia konferencji
 15. Dodaj uczestnika do warsztatu
@@ -18,13 +18,13 @@
 - firmy (po nipie, nazwie)
 - uczestnika (po imieniu i nazwisku, telefonie, e-mailu)
 - klienta (jw)
-- ew. po adresie, mieœcie itd.
-18. wszyscy Uczestnicy konferencji, warsztatów po id
-19. Widok z p³atnoœciami
-20. Konferencje zamówione (wiêcej ni¿ 2 tygonie temu/ogólnie) bez uzupe³nionych uczestników
-21. Konferencje nieop³acone - widok
-22. Usuwanie nieop³aconych w terminie konferencji
-23. Klienci posortowani wed³ug iloœci op³aconych rezerwacji
-24. Faktura za dan¹ konferencjê
-25. Liczba wolnych miejsc na dany warsztat/konferencjê
+- ew. po adresie, mieÅ›cie itd.
+18. wszyscy Uczestnicy konferencji, warsztatÃ³w po id
+19. Widok z pÅ‚atnoÅ›ciami
+20. Konferencje zamÃ³wione (wiÄ™cej niÅ¼ 2 tygonie temu/ogÃ³lnie) bez uzupeÅ‚nionych uczestnikÃ³w
+21. Konferencje nieopÅ‚acone - widok
+22. Usuwanie nieopÅ‚aconych w terminie konferencji
+23. Klienci posortowani wedÅ‚ug iloÅ›ci opÅ‚aconych rezerwacji
+24. Faktura za danÄ… konferencjÄ™
+25. Liczba wolnych miejsc na dany warsztat/konferencjÄ™
 26. (anulowanie konferencji, warsztatu)
