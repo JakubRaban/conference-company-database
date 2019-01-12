@@ -157,3 +157,35 @@ begin
 		(select ConferenceID from Conferences where Name = @ConferenceName)
 	)
 end
+go
+
+create procedure ShowParticipantsOfConferenceDay
+	@ConferenceID int,
+	@ConferenceDayOrdinal int
+as
+begin
+	select FirstName, LastName, participants.Phone, CompanyName
+	from ConferenceDayParticipants
+	inner join Participants on Participants.ParticipantID = ConferenceDayParticipants.ParticipantID
+	inner join EmployeesOfCompanies on Participants.ParticipantID = EmployeesOfCompanies.ParticipantID
+	inner join Companies on EmployeesOfCompanies.CompanyID = Companies.CompanyID
+	inner join ConferenceDayReservation on ConferenceDayReservationID = DayReservationID
+	inner join ConferenceDays on ConferenceDayReservation.ConferenceDayID = ConferenceDays.ConferenceDayID
+	where ConferenceDays.DayOrdinal = @ConferenceDayOrdinal and ConferenceDays.ConferenceID = @ConferenceID
+end
+go
+
+create procedure ShowParticipantsOfConference
+	@ConferenceID int
+as
+begin
+	select FirstName, LastName, participants.Phone, CompanyName
+	from ConferenceDayParticipants
+	inner join Participants on Participants.ParticipantID = ConferenceDayParticipants.ParticipantID
+	inner join EmployeesOfCompanies on Participants.ParticipantID = EmployeesOfCompanies.ParticipantID
+	inner join Companies on EmployeesOfCompanies.CompanyID = Companies.CompanyID
+	inner join ConferenceDayReservation on ConferenceDayReservationID = DayReservationID
+	inner join ConferenceDays on ConferenceDayReservation.ConferenceDayID = ConferenceDays.ConferenceDayID
+	where ConferenceDays.ConferenceID = @ConferenceID
+end
+go
