@@ -1,5 +1,5 @@
 create view FrequentCustomers as
-select firstname, lastname, companyname, count(reservationid) as NumberOfReservations
+select firstname + lastname as 'Full Name', companyname as 'Company Name', count(reservationid) as 'Number of paid reservations'
 from Customers
 inner join ConferenceReservations
 	on Customers.CustomerID = ConferenceReservations.CustomerID
