@@ -86,3 +86,74 @@ begin catch
 end catch
 end
 go
+
+
+create procedure AddPrivateCustomer
+	@ParticipantPhone nvarchar(15),
+	@Street nvarchar(80),
+	@HouseNumber nvarchar(5),
+	@AppartmentNumber int,
+	@PostalCode char(6),
+	@CityName varchar(80),
+	@RegionName varchar(80),
+	@CountryName varchar(80)
+as
+begin
+begin try
+	begin tran tr
+		declare @ParticipantID int = (select ParticipantID
+									  from Participants
+									  where Phone = @ParticipantPhone)
+		declare @CityID int
+		exec FindCity @CityName, @RegionName, @CountryName, @CityID
+		insert into Customers (Street, HouseNumber, AppartmentNumber, PostalCode, CityID)
+		values (
+			@Street, @HouseNumber, @AppartmentNumber, @PostalCode, @CityID
+		)
+		insert into PrivateCustomers (ParticipantID, CustomerID)
+		values (
+			@ParticipantID, (select max(CustomerID) from Customers)
+		)
+	commit tran find
+end try
+begin catch
+	rollback tran tr
+end catch
+end
+go
+
+create procedure AddOurEmployee
+	@FirstName varchar(30),
+	@LastName varchar(50),
+	@BirthDate date,
+	@HireDate date,
+	@Phone varchar(15),
+	@Street varchar(74),
+	@HouseNumber varchar(5),
+	@AppartmentNumber int,
+	@CityName varchar(80),
+	@RegionName varchar(80),
+	@CountryName varchar(80),
+	@PostalCode char(6),
+	@Email varchar(100)
+as
+begin
+	declare @CityID int
+	exec FindCity @CityName, @RegionName, @CountryName, @CityID
+	insert into OurEmployees (FirstName, LastName, BirthDate, HireDate, Phone, Street ,HouseNumber ,AppartmentNumber ,CityID ,PostalCode ,Email)
+	values (
+		@FirstName, @LastName, @BirthDate, @HireDate, @Phone, @Street, @HouseNumber, @AppartmentNumber, @CityID, @PostalCode, @Email
+	)
+end
+go
+
+create procedure BindOurEmployeeWithConference
+	@EmpPhone varchar(15),
+	@ConferenceName varchar(200)
+as
+begin
+	insert into ConferenceEmployees (EmployeeID, ConferenceID) values (
+		(select EmployeeID from OurEmployees where Phone = @EmpPhone),
+		(select ConferenceID from Conferences where Name = @ConferenceName)
+	)
+end
