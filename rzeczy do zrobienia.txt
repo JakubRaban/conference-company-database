@@ -1,4 +1,4 @@
-1. Dodaj uczestnika (firmowego/bez firmy)
+﻿1. Dodaj uczestnika (firmowego/bez firmy)
 2. Dodaj klienta prywatnego (z wyszukiwaniem wśród uczestników po telefonie)
 3. Powiąż uczestnika z firmą
 4. Dodaj region w kraju + wyszukiwanie
@@ -28,3 +28,4 @@
 24. Faktura za daną konferencję
 25. Liczba wolnych miejsc na dany warsztat/konferencję
 26. (anulowanie konferencji, warsztatu)
+27. Dodaj firmę
