@@ -41,16 +41,84 @@ begin
 insert into Participants (FirstName, LastName, Phone, Email) values (@FirstName, @LastName, @Phone, @Email)
 end
 go
+	
+create procedure FindCompanyByNIP
+	@NIP char(10),
+	@ID int output
+as
+begin
+	set @ID = (select CompanyID from Companies where NIP = @NIP)
+end
+go
+
+create procedure FindCompanyByName
+	@Name varchar(150),
+	@ID int output
+as
+begin
+	set @ID = (select CompanyID from Companies where CompanyName = @Name)
+end
+go
+
+create procedure FindCompanyByPhone
+	@Phone varchar(15),
+	@ID int output
+as
+begin
+	set @ID = (select CompanyID from Companies where Phone = @Phone)
+end
+go
+
+create procedure FindParticipantByName
+	@FirstName varchar(30),
+	@LastName varchar(50),
+	@ID int output
+as
+begin
+	set @ID = (select ParticipantID from Participants where FirstName = @FirstName and LastName = @LastName)
+end
+go
+
+create procedure FindParticipantByPhone
+	@Phone varchar(15),
+	@ID int output
+as
+begin
+	set @ID = (select ParticipantID from Participants where Phone = @Phone)
+end
+go
+
+create procedure FindCustomerByPhone
+	@Phone varchar(15),
+	@CustomerID int output
+as
+declare @CompanyID int;
+begin
+	exec FindCompanyByPhone @Phone, @CompanyID;
+	if @CompanyID is null
+	begin
+		declare @ParticipantID int;
+		exec FindParticipantByPhone @Phone, @ParticipantID;
+		set @CustomerID = (select CustomerID from PrivateCustomers where ParticipantID = @ParticipantID)
+		return
+	end
+	set @CustomerID = @CompanyID
+end
+go
 
 create procedure BoundParticipantWithCompany
 	@Phone varchar(15),
 	@NIP char(10)
 as
+declare @ParticipantID int,
+		@CompanyID int;
+exec FindParticipantByPhone @Phone, @ParticipantID;
+exec FindCompanyByNIP @NIP, @CompanyID;
 begin
 insert into EmployeesOfCompanies (ParticipantID, CompanyID)
 values (
-	(select ParticipantID from Participants where Phone = @Phone),
-	(select CompanyID from Companies where NIP = @NIP)
+	@ParticipantID,
+	@CompanyID
 )
 end
 go
@@ -88,6 +156,98 @@ values (
 		@CityID,
 		@PostalCode
 	   )
+end
+go
+
+create procedure AddPriceStep
+	@ConferenceName varchar(200),
+	@ConferenceStartDate date,
+	@PriceStartsOn date,
+	@PriceEndsOn date,
+	@DiscountRate real
+as
+declare @ConferenceID int;
+set @ConferenceID = (select ConferenceID
+					 from Conferences
+					 where Name = @ConferenceName and StartDate = @ConferenceStartDate);
+begin
+	if @ConferenceID is null
+	begin
+		print 'Nie znaleziono konferencji'
+		return
+	end
+	if exists (select PriceEndsOn 
+			   from ConferencePricetables
+			   where ConferenceID = @ConferenceID and PriceEndsOn >= @PriceStartsOn and PriceEndsOn <= @PriceEndsOn)
+	begin
+		print 'Niepoprawna data rozpoczêcia progu cenowego'
+		return
+	end
+	if exists (select PriceEndsOn 
+			   from ConferencePricetables
+			   where ConferenceID = @ConferenceID and PriceStartsOn >= @PriceStartsOn and PriceStartsOn <= @PriceEndsOn)
+	begin
+		print 'Niepoprawna data zakoñczenia progu cenowego'
+		return
+	end
+	insert into ConferencePricetables (ConferenceID, PriceStartsOn, PriceEndsOn, DiscountRate)
+	values (@ConferenceID, @PriceStartsOn, @PriceEndsOn, @DiscountRate)
+end
+go
+
+create procedure MarkReservationAsPaid
+	@Phone varchar(15),
+	@DateOrdered date
+as
+declare	@ReservationID int,
+		@CustomerID int;
+exec FindCustomerByPhone @Phone, @CustomerID;
+begin
+	set @ReservationID = (select ReservationID
+						  from ConferenceReservations
+						  where CustomerID = @CustomerID and DateOrdered = @DateOrdered)
+	update ConferenceReservations
+	set DatePaid = convert (date, getdate())
+	where ReservationID = @ReservationID;
+end
+go
+
+create procedure AddWorkshopAtDay
+	@WorkshopName varchar(100),
+	@ConferenceName varchar(200),
+	@Day smallint,
+	@StartTime time,
+	@EndTime time,
+	@Price money,
+	@ParticipantsLimit int
+as
+declare @ConferenceDayID int,
+		@WorkshopID int;
+begin
+	set @WorkshopID = (select WorkshopID from Workshops where Name = @WorkshopName)
+	if @WorkshopID is null begin
+		print 'Brak warsztatu o podanej nazwie w bazie'
+		return
+	end
+	set @ConferenceDayID = (select ConferenceDayID
+							from ConferenceDays
+							where DayOrdinal = @Day and
+								  ConferenceID = (select ConferenceID
+												  from Conferences
+												  where Name = @ConferenceName))
+	if @ConferenceDayID is null begin
+		print 'Nie znaleziono konferencji'
+		return
+	end
+	insert into ConferenceDayWorkshops (ConferenceDayID, WorkshopID, StartTime, EndTime, Price, ParticipantsLimit)
+	values (
+			@ConferenceDayID,
+			@WorkshopID,
+			@StartTime,
+			@EndTime,
+			@Price,
+			@ParticipantsLimit
+		   )
 end
 go
 

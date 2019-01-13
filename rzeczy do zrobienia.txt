@@ -1,12 +1,12 @@
-﻿1. Dodaj uczestnika (firmowego/bez firmy)
+﻿1. Dodaj uczestnika (firmowego/bez firmy) X
 2. Dodaj klienta prywatnego (z wyszukiwaniem wśród uczestników po telefonie)
-3. Powiąż uczestnika z firmą
+3. Powiąż uczestnika z firmą X
 4. Dodaj region w kraju + wyszukiwanie
 5. (ja to zrobię) Dodaj miasto w regionie + wyszukiwanie 
 6. Dodaj własnego pracownika
-7. Dodaj konferencję
+7. Dodaj konferencję X
 8. Powiąż pracownika z konferencją
-9. Dodaj próg cenowy do konferencji (ze sprawdzaniem innych przedziałów cen i daty)
+9. Dodaj próg cenowy do konferencji (ze sprawdzaniem innych przedziałów cen i daty) X
 10. Utwórz rezerwację na konferencję
 11. Zapłać za rezerwację na konferencję
 12. Dodaj rezerwację na dany dzień
@@ -15,12 +15,12 @@
 15. Dodaj uczestnika do warsztatu
 16. Nowa rezerwacja na warsztat
 17. Wyszukiwanie
-- firmy (po nipie, nazwie)
-- uczestnika (po imieniu i nazwisku, telefonie, e-mailu)
+- firmy (po nipie, nazwie, telefonie) X
+- uczestnika (po imieniu i nazwisku, telefonie, e-mailu) X (zrobiłem bez e-maila)
 - klienta (jw)
 - ew. po adresie, mieście itd.
 18. wszyscy Uczestnicy konferencji, warsztatów po id
-19. Widok z płatnościami
+19. Widok z płatnościamiz
 20. Konferencje zamówione (więcej niż 2 tygonie temu/ogólnie) bez uzupełnionych uczestników
 21. Konferencje nieopłacone - widok
 22. Usuwanie nieopłaconych w terminie konferencji
@@ -29,3 +29,4 @@
 25. Liczba wolnych miejsc na dany warsztat/konferencję
 26. (anulowanie konferencji, warsztatu)
 27. Dodaj firmę
+28. Sprawdź cenę rezerwacji (widok z parametrem - funkcja)(ja to zrobię - Paweł)
