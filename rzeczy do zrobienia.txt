@@ -1,13 +1,13 @@
 ﻿1. Dodaj uczestnika (firmowego/bez firmy) X
-2. Dodaj klienta prywatnego (z wyszukiwaniem wśród uczestników po telefonie)
+2. Dodaj klienta prywatnego (z wyszukiwaniem wśród uczestników po telefonie) X
 3. Powiąż uczestnika z firmą X
-4. Dodaj region w kraju + wyszukiwanie
-5. (ja to zrobię) Dodaj miasto w regionie + wyszukiwanie 
-6. Dodaj własnego pracownika
+4. Dodaj region w kraju + wyszukiwanie X
+5. (ja to zrobię) Dodaj miasto w regionie + wyszukiwanie X
+6. Dodaj własnego pracownika X
 7. Dodaj konferencję X
-8. Powiąż pracownika z konferencją
+8. Powiąż pracownika z konferencją X
 9. Dodaj próg cenowy do konferencji (ze sprawdzaniem innych przedziałów cen i daty) X
-10. Utwórz rezerwację na konferencję
+10. Utwórz rezerwację na konferencję X
 11. Zapłać za rezerwację na konferencję
 12. Dodaj rezerwację na dany dzień
 13. Dodaj warsztat w dniu
@@ -23,7 +23,7 @@
 19. Widok z płatnościamiz
 20. Konferencje zamówione (więcej niż 2 tygonie temu/ogólnie) bez uzupełnionych uczestników
 21. Konferencje nieopłacone - widok
-22. Usuwanie nieopłaconych w terminie konferencji
+22. Usuwanie nieopłaconych w terminie konferencji X
 23. Klienci posortowani według ilości opłaconych rezerwacji
 24. Faktura za daną konferencję
 25. Liczba wolnych miejsc na dany warsztat/konferencję

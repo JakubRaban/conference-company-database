@@ -410,3 +410,35 @@ begin
 end
 go
 
+create procedure NewConferenceReservation
+	@CustomerPhone varchar(15),
+	@ReservationID int output
+as
+begin
+begin try
+	begin tran tr
+		declare @CustomerID int
+		exec FindCustomerByPhone @CustomerPhone, @CustomerID output
+		if @CustomerID is not null begin
+			insert into ConferenceReservations (CustomerID, DateOrdered)
+			values (@CustomerID, convert(date, getdate() ))
+			set @ReservationID = @@IDENTITY
+		end
+	commit tran tr
+end try
+begin catch
+	rollback tran tr
+end catch
+end
+go
+
+create procedure DeleteUnpaidReservations as
+begin
+begin try
+	begin tran tr
+		delete from ConferenceReservations
+		where DatePaid is null and DATEDIFF(day, DateOrdered, convert(date, getdate())) > 7
+	commit tran tr
+end try
+begin catch rollback tran tr end catch
+end -- dopisaæ trigger usuwaj¹cy rezerwacjê dni konferencji, warsztatów itd.
