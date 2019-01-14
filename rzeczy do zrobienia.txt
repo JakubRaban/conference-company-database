@@ -31,3 +31,8 @@
 27. Dodaj firmę
 28. Trigger gdy nowa rezerwacja dnia X
 29. Sprawdź cenę rezerwacji (widok z parametrem - funkcja)
+Na pewno będziemy potrzebowali reguł usuwania dla konferencji i rezerwacji
+Według mnie trzeba zmienić dodawanie klientów w taki sposób:
+- procedura addParticipant dodaje wpis do tabeli participants
+- procedura addPrivateCustomer wywołuje addParticipant, dodaje wpis do Customers i wiąże Customera z Participantem
+- procedura addCompany wywołuje addParticipant, dodaje customera, dodaje firmę i wiąże firmę z Participantem
