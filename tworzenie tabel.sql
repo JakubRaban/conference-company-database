@@ -64,7 +64,7 @@ create table Conferences (
 
 --utw
 create table ConferencePricetables (
-	PriceID int not null primary key,
+	PriceID int not null primary key identity(0,1),
 	ConferenceID int not null foreign key references Conferences(ConferenceID),
 	PriceStartsOn date not null,
 	PriceEndsOn date not null,

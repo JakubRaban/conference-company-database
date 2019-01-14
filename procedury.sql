@@ -442,3 +442,66 @@ begin try
 end try
 begin catch rollback tran tr end catch
 end -- dopisaæ trigger usuwaj¹cy rezerwacjê dni konferencji, warsztatów itd.
+go
+
+create procedure FindConferenceAndConfDayByNameAndDate
+	@ConferenceName varchar(200),
+	@Date date,
+	@ConferenceID int output,
+	@ConferenceDayID int output
+as
+begin
+begin try
+	begin tran tr
+		select @ConferenceID = Conferences.ConferenceID
+		from Conferences
+		inner join ConferenceDays on Conferences.ConferenceID = ConferenceDays.ConferenceID
+		where name = @ConferenceName
+		if @ConferenceID is not null begin
+			select @ConferenceDayID = ConferenceDayID
+			from ConferenceDays
+			where ConferenceID = @ConferenceID and Date = @Date
+		end
+	commit tran tr
+end try
+begin catch
+	rollback tran tr
+end catch
+end
+go
+
+alter procedure FindReservation @CustomerPhone varchar(15), @ReservationID int output as
+begin
+	declare @CustomerID int
+	exec FindCustomerByPhone @CustomerPhone, @CustomerID output
+	select @ReservationID = max(ReservationID)
+	from ConferenceReservations
+	where CustomerID = @CustomerID
+end
+go
+
+create procedure NewDayReservation
+	@CustomerPhone varchar(15),
+	@ConferenceName varchar(200),
+	@Date date,
+	@AdultSeats int,
+	@StudentSeats int
+as
+begin
+begin try
+	begin tran tr
+		declare @ConfID int, @ConfDay int
+		exec FindConferenceAndConfDayByNameAndDate @ConferenceName, @Date, @ConfID output, @ConfID output
+		if @ConfDay is not null begin
+			declare @ReservationID int
+			exec FindReservation @CustomerPhone, @ReservationID output
+			insert into ConferenceDayReservation 
+			(ConferenceDayID, ReservedAdultSeats, ReservedStudentSeats, ReservationID)
+			values (@ConfDay, @AdultSeats, @StudentSeats, @ReservationID)
+		end
+	commit tran tr
+end try
+begin catch rollback tran tr end catch
+end
+go
+

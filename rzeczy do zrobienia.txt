@@ -9,7 +9,7 @@
 9. Dodaj próg cenowy do konferencji (ze sprawdzaniem innych przedziałów cen i daty) X
 10. Utwórz rezerwację na konferencję X
 11. Zapłać za rezerwację na konferencję X
-12. Dodaj rezerwację na dany dzień
+12. Dodaj rezerwację na dany dzień X
 13. Dodaj warsztat w dniu X
 14. Dodaj uczestnika do dnia konferencji
 15. Dodaj uczestnika do warsztatu
@@ -29,5 +29,5 @@
 25. Liczba wolnych miejsc na dany warsztat/konferencję
 26. (anulowanie konferencji, warsztatu)
 27. Dodaj firmę
-28. Trigger gdy nowa rezerwacja dnia
+28. Trigger gdy nowa rezerwacja dnia X
 29. Sprawdź cenę rezerwacji (widok z parametrem - funkcja)
