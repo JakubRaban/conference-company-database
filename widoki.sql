@@ -1,5 +1,5 @@
 create view FrequentCustomers as
-select firstname + lastname as 'Full Name', companyname as 'Company Name', count(reservationid) as 'Number of paid reservations'
+select top 10 firstname + ' ' + lastname as 'Full Name', companyname as 'Company Name', count(reservationid) as 'Number of paid reservations'
 from Customers
 inner join ConferenceReservations
 	on Customers.CustomerID = ConferenceReservations.CustomerID
@@ -9,31 +9,54 @@ left join Participants
 	on PrivateCustomers.ParticipantID = Participants.ParticipantID
 left join Companies
 	on Customers.CustomerID = Companies.CompanyID
-group by firstname, lastname, CompanyName
+group by firstname, lastname, companyname
+order by 3
 go
 
 create view TwoWeekOldReservationsWithoutAllParticipants as
-select DayReservationID as 'Day Reservation ID', 
-       (ReservedAdultSeats - (select count(*)
-							 from (select ParticipantID
-								   from ConferenceDayParticipants as cdp1
-								   where cdr.DayReservationID = cdp1.ConferenceDayReservationID
-								   except
-								   select ParticipantID
-								   from Participants
-								   left join Students on Participants.ParticipantID = Students.ParticipantID
-								   where FirstName is not null and LastName is not null and Students.ParticipantID is null) as xd)) as 'Adult seats left',
-	   (ReservedStudentSeats - (select count(*)
-							   from (select ParticipantID
-								   from ConferenceDayParticipants as cdp1
-								   where cdr.DayReservationID = cdp1.ConferenceDayReservationID
-								   except
-								   select ParticipantID
-								   from Participants
-								   left join Students on Participants.ParticipantID = Students.ParticipantID
-								   where FirstName is not null and LastName is not null and Students.ParticipantID is not null) as xd)) as 'Student seats left'
-from ConferenceDayReservation as cdr
-inner join ConferenceReservations as cr
+select cdp.ConferenceDayReservationID as 'Conference Day Reservation ID',
+	   (select 2 from (select cdpp.ConferenceDayReservationID as x1, count(cdpp.ParticipantID) as y1
+					   from ConferenceDayParticipants cdpp
+					   inner join Participants p
+							on P.ParticipantID = cdpp.ParticipantID
+					   left join Students
+							on p.ParticipantID = students.ParticipantID
+					   where LastName is null and students.ParticipantID is null
+					   group by cdpp.ConferenceDayReservationID) as t where t.x1 = cdp.ConferenceDayReservationID) as 'Adult Seats Left',
+	   (select 2 from (select cdpp.ConferenceDayReservationID as x2, count(cdpp.ParticipantID) as y2
+					   from ConferenceDayParticipants cdpp
+					   inner join Participants p
+							on P.ParticipantID = cdpp.ParticipantID
+					   inner join Students
+							on p.ParticipantID = students.ParticipantID
+					   where LastName is null
+					   group by cdpp.ConferenceDayReservationID) as t where t.x2 = cdp.ConferenceDayReservationID) as 'Student seats left',
+	   c.Phone
+from ConferenceDayParticipants cdp
+inner join ConferenceDayReservation cdr
+	on cdp.ConferenceDayReservationID = cdr.DayReservationID
+inner join ConferenceReservations cr
 	on cdr.ReservationID = cr.ReservationID
-inner join ConferenceDayParticipants as cdp
-	on cdp.ParticipantID = cdr.DayReservationID
+inner join Customers cust
+	on cr.CustomerID = cust.CustomerID
+inner join Companies c
+	on c.CompanyID = cust.CustomerID
+where datediff(day, cr.dateordered, convert(date, getdate())) > 14 and (
+(select 2 from (select cdpp.ConferenceDayReservationID as x2, count(cdpp.ParticipantID) as y2
+					   from ConferenceDayParticipants cdpp
+					   inner join Participants p
+							on P.ParticipantID = cdpp.ParticipantID
+					   inner join Students
+							on p.ParticipantID = students.ParticipantID
+					   where LastName is null
+					   group by cdpp.ConferenceDayReservationID) as t where t.x2 = cdp.ConferenceDayReservationID) > 0
+					   or
+(select 2 from (select cdpp.ConferenceDayReservationID as x1, count(cdpp.ParticipantID) as y1
+					   from ConferenceDayParticipants cdpp
+					   inner join Participants p
+							on P.ParticipantID = cdpp.ParticipantID
+					   left join Students
+							on p.ParticipantID = students.ParticipantID
+					   where LastName is null and students.ParticipantID is null
+					   group by cdpp.ConferenceDayReservationID) as t where t.x1 = cdp.ConferenceDayReservationID) > 0)
+go

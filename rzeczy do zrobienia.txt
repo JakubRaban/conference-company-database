@@ -21,7 +21,7 @@
 - ew. po adresie, mieście itd.
 18. wszyscy Uczestnicy konferencji, warsztatów po id
 19. Widok z płatnościami
-20. Konferencje zamówione (więcej niż 2 tygonie temu/ogólnie) bez uzupełnionych uczestników
+20. Konferencje zamówione (więcej niż 2 tygonie temu/ogólnie) bez uzupełnionych uczestników -- chyba X
 21. Konferencje nieopłacone - widok
 22. Usuwanie nieopłaconych w terminie konferencji X
 23. Klienci posortowani według ilości opłaconych rezerwacji

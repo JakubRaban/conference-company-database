@@ -467,4 +467,3 @@ set @ConferenceDayParticipantID = (select ConferenceDayParticipantID
 insert into WorkshopParticipants (ConferenceDayParticipantID, ConferenceDayWorkshopID)
 values (@ConferenceDayParticipantID, @ConferenceDayWorkshopID)
 end
-
