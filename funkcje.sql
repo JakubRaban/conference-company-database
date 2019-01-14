@@ -54,4 +54,43 @@ begin
 end
 go
 
---create function CalculatePriceForReservation (
+create function CalculatePriceForReservation (@Phone varchar(15), @DateOrdered date)
+returns money
+as
+begin
+	declare @CustomerID int,
+			@ReservationID int,
+			@ConferenceID int,
+			@ReservedAdults int,
+			@ReservedStudents int,
+			@PriceForWorkshops money,
+			@PriceForDay money,
+			@StudentDiscount real;
+	exec @CustomerID = FindCustomerByPhone @Phone;
+	set @ReservationID = (select ReservationID
+						  from ConferenceReservations
+						  where CustomerID = @CustomerID and DateOrdered = @DateOrdered);
+	set @ConferenceID = (select ConferenceID
+						 from ConferenceDays cd
+						 join ConferenceDayReservation cdr
+						 on cd.ConferenceDayID = cdr.ConferenceDayID
+						 group by ConferenceID);
+	set @ReservedAdults = (select sum(ReservedAdultSeats)
+						   from ConferenceDayReservation
+						   where ReservationID = @ReservationID);
+	set @ReservedStudents = (select sum(ReservedAdultSeats)
+							 from ConferenceDayReservation
+							 where ReservationID = @ReservationID);
+	set @PriceForWorkshops = (select sum(cdw.Price * wr.ReservedSeats)
+							  from WorkshopReservation wr
+							  join ConferenceDayWorkshops cdw
+							  on wr.ConferenceDayWorkshopID = cdw.ConferenceDayWorkshopID)
+	set @PriceForDay = (select (1 - DiscountRate) * (select BasePriceForDay from Conferences where ConferenceID = @ConferenceID)
+						from ConferencePricetables
+						where @DateOrdered between PriceStartsOn and PriceEndsOn and ConferenceID = @ConferenceID);
+	set @StudentDiscount = (select StudentDiscount
+							from Conferences
+							where ConferenceID = @ConferenceID);
+	return @PriceForWorkshops + (1 - @StudentDiscount) * @PriceForDay * @ReservedStudents + @PriceForDay * @ReservedAdults
+end
+go
