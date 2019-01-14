@@ -8,16 +8,16 @@
 8. Powiąż pracownika z konferencją
 9. Dodaj próg cenowy do konferencji (ze sprawdzaniem innych przedziałów cen i daty) X
 10. Utwórz rezerwację na konferencję
-11. Zapłać za rezerwację na konferencję
+11. Zapłać za rezerwację na konferencję X
 12. Dodaj rezerwację na dany dzień
-13. Dodaj warsztat w dniu
+13. Dodaj warsztat w dniu X
 14. Dodaj uczestnika do dnia konferencji
 15. Dodaj uczestnika do warsztatu
 16. Nowa rezerwacja na warsztat
 17. Wyszukiwanie
 - firmy (po nipie, nazwie, telefonie) X
 - uczestnika (po imieniu i nazwisku, telefonie, e-mailu) X (zrobiłem bez e-maila)
-- klienta (jw)
+- klienta (jw) X
 - ew. po adresie, mieście itd.
 18. wszyscy Uczestnicy konferencji, warsztatów po id
 19. Widok z płatnościamiz
