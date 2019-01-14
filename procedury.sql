@@ -249,3 +249,4 @@ begin
 	where ConferenceDays.ConferenceID = @ConferenceID
 end
 go
+

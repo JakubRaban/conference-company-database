@@ -29,3 +29,4 @@
 25. Liczba wolnych miejsc na dany warsztat/konferencję
 26. (anulowanie konferencji, warsztatu)
 27. Dodaj firmę
+28. Trigger gdy nowa rezerwacja dnia
