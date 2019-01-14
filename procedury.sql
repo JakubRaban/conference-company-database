@@ -42,24 +42,6 @@ insert into Participants (FirstName, LastName, Phone, Email) values (@FirstName,
 end
 go
 
-create procedure FindCustomerByPhone
-	@Phone varchar(15),
-	@CustomerID int output
-as
-declare @CompanyID int;
-begin
-	exec @CompanyID = FindCompanyByPhone @Phone;
-	if @CompanyID is null
-	begin
-		declare @ParticipantID int;
-		exec FindParticipantByPhone @Phone, @ParticipantID;
-		set @CustomerID = (select CustomerID from PrivateCustomers where ParticipantID = @ParticipantID)
-		return
-	end
-	set @CustomerID = @CompanyID
-end
-go
-
 create procedure BoundParticipantWithCompany
 	@Phone varchar(15),
 	@NIP char(10)
