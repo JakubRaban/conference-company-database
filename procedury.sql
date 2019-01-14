@@ -41,52 +41,6 @@ begin
 insert into Participants (FirstName, LastName, Phone, Email) values (@FirstName, @LastName, @Phone, @Email)
 end
 go
-	
-create procedure FindCompanyByNIP
-	@NIP char(10),
-	@ID int output
-as
-begin
-	set @ID = (select CompanyID from Companies where NIP = @NIP)
-end
-go
-
-create procedure FindCompanyByName
-	@Name varchar(150),
-	@ID int output
-as
-begin
-	set @ID = (select CompanyID from Companies where CompanyName = @Name)
-end
-go
-
-create procedure FindCompanyByPhone
-	@Phone varchar(15),
-	@ID int output
-as
-begin
-	set @ID = (select CompanyID from Companies where Phone = @Phone)
-end
-go
-
-create procedure FindParticipantByName
-	@FirstName varchar(30),
-	@LastName varchar(50),
-	@ID int output
-as
-begin
-	set @ID = (select ParticipantID from Participants where FirstName = @FirstName and LastName = @LastName)
-end
-go
-
-create procedure FindParticipantByPhone
-	@Phone varchar(15),
-	@ID int output
-as
-begin
-	set @ID = (select ParticipantID from Participants where Phone = @Phone)
-end
-go
 
 create procedure FindCustomerByPhone
 	@Phone varchar(15),
@@ -94,7 +48,7 @@ create procedure FindCustomerByPhone
 as
 declare @CompanyID int;
 begin
-	exec FindCompanyByPhone @Phone, @CompanyID;
+	exec @CompanyID = FindCompanyByPhone @Phone;
 	if @CompanyID is null
 	begin
 		declare @ParticipantID int;
@@ -442,3 +396,33 @@ begin try
 end try
 begin catch rollback tran tr end catch
 end -- dopisaæ trigger usuwaj¹cy rezerwacjê dni konferencji, warsztatów itd.
+go
+
+create procedure AddParticipantToWorkshop
+	@Phone varchar(15),
+	@WorkshopName varchar(100),
+	@Date date,
+	@StartTime time
+as
+begin
+declare @ConferenceDayID int,
+		@WorkshopID int,
+		@ConferenceDayWorkshopID int,
+		@ParticipantID int,
+		@DayReservationID int,
+		@ConferenceDayParticipantID int;
+set @ConferenceDayID = (select ConferenceDayID from ConferenceDays where Date = @Date);
+set @WorkshopID = (select WorkshopID from Workshops where Name = @WorkshopName);
+set @ConferenceDayWorkshopID = (select ConferenceDayWorkshopID
+								from ConferenceDayWorkshops
+								where ConferenceDayID = @ConferenceDayID and WorkshopID = @WorkshopID);
+set @ParticipantID = (select ParticipantID from Participants where Phone = @Phone);
+set @DayReservationID = (select DayReservationID from ConferenceDayReservation where ConferenceDayID = @ConferenceDayID);
+set @ConferenceDayParticipantID = (select ConferenceDayParticipantID
+								   from ConferenceDayParticipants
+								   where ConferenceDayReservationID = @DayReservationID and ParticipantID = @ParticipantID);
+insert into WorkshopParticipants (ConferenceDayParticipantID, ConferenceDayWorkshopID)
+values (@ConferenceDayParticipantID, @ConferenceDayWorkshopID)
+end
+
+

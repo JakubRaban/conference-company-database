@@ -12,7 +12,7 @@
 12. Dodaj rezerwację na dany dzień
 13. Dodaj warsztat w dniu X
 14. Dodaj uczestnika do dnia konferencji
-15. Dodaj uczestnika do warsztatu
+15. Dodaj uczestnika do warsztatu X
 16. Nowa rezerwacja na warsztat
 17. Wyszukiwanie
 - firmy (po nipie, nazwie, telefonie) X
@@ -20,7 +20,7 @@
 - klienta (jw) X
 - ew. po adresie, mieście itd.
 18. wszyscy Uczestnicy konferencji, warsztatów po id
-19. Widok z płatnościamiz
+19. Widok z płatnościami
 20. Konferencje zamówione (więcej niż 2 tygonie temu/ogólnie) bez uzupełnionych uczestników
 21. Konferencje nieopłacone - widok
 22. Usuwanie nieopłaconych w terminie konferencji X
