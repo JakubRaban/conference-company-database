@@ -55,3 +55,13 @@ end
 go
 
 --create function CalculatePriceForReservation (
+
+
+CREATE FUNCTION ConferenceSize(@ConferenceDayID INT)
+RETURNS int
+BEGIN
+	DECLARE @size int = (SELECT ParticipantsLimit FROM ConferenceDays
+	INNER JOIN conferences ON Conferences.ConferenceID = ConferenceDays.ConferenceID
+	WHERE ConferenceDayID = @ConferenceDayID)
+	RETURN @size
+END

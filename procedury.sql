@@ -466,4 +466,65 @@ set @ConferenceDayParticipantID = (select ConferenceDayParticipantID
 								   where ConferenceDayReservationID = @DayReservationID and ParticipantID = @ParticipantID);
 insert into WorkshopParticipants (ConferenceDayParticipantID, ConferenceDayWorkshopID)
 values (@ConferenceDayParticipantID, @ConferenceDayWorkshopID)
-end
+END
+GO
+
+CREATE PROCEDURE NewCompany
+	@CompanyName NVARCHAR(150),
+	@NIP CHAR(10),
+	@Phone VARCHAR(15),
+	@Email VARCHAR(100),
+	@Street NVARCHAR(74),
+	@HouseNumber VARCHAR(5),
+	@AppartmentNumber INT,
+	@CityName VARCHAR(80),
+	@PostalCode CHAR(6),
+	@RegionName VARCHAR(80),
+	@CountryName VARCHAR(80)
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRAN tr
+		DECLARE @cityID INT
+		EXEC dbo.FindCity @CityName = @CityName,          -- nvarchar(80)
+		                  @RegionName = @RegionName,        -- nvarchar(80)
+		                  @CountryName = @CountryName,       -- nvarchar(80)
+		                  @CityID = @CityID OUTPUT -- int
+		INSERT INTO dbo.Customers
+		(
+		    Street,
+		    HouseNumber,
+		    AppartmentNumber,
+		    CityID,
+		    PostalCode
+		)
+		VALUES
+		(   @Street, -- Street - nvarchar(74)
+		    @HouseNumber, -- HouseNumber - nvarchar(5)
+		    @AppartmentNumber,   -- AppartmentNumber - int
+		    @cityID,   -- CityID - int
+		    @PostalCode   -- PostalCode - char(6)
+		    )
+		DECLARE @CompanyID INT = (SELECT MAX(CustomerID) FROM dbo.Customers)
+		INSERT INTO dbo.Companies
+		(
+		    CompanyID,
+		    CompanyName,
+		    NIP,
+		    Phone,
+		    Email
+		)
+		VALUES
+		(   @CompanyID,   -- CompanyID - int
+		    @CompanyName, -- CompanyName - nvarchar(150)
+		    @NIP,  -- NIP - char(10)
+		    @Phone,  -- Phone - varchar(12)
+		    @Email   -- Email - varchar(100)
+		    )
+	COMMIT TRAN tr
+END TRY
+BEGIN CATCH
+	ROLLBACK TRAN tr
+END CATCH
+END
+go 
