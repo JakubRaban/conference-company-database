@@ -36,3 +36,5 @@ Według mnie trzeba zmienić dodawanie klientów w taki sposób:
 - procedura addParticipant dodaje wpis do tabeli participants
 - procedura addPrivateCustomer wywołuje addParticipant, dodaje wpis do Customers i wiąże Customera z Participantem
 - procedura addCompany wywołuje addParticipant, dodaje customera, dodaje firmę i wiąże firmę z Participantem
+
+Wykorzystać procedury i funkcje find w bardziej złożonych procedurach (zastąpić selecty)
