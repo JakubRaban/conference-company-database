@@ -37,14 +37,14 @@ Wykorzystać procedury i funkcje find w bardziej złożonych procedurach (zastą
 Uwagi zygmunnt:
 31. Usunąć uniq na telefon
 32. Dodać uniq na:
-- countryname
-- region
-- city
+- countryname X
+- region X
+- city (o tym chyba nie mówiła, nazwy miast mogą się powtarzać między województwami)
 33. Widok identyfikatora uczestnika konferencji
 34. Widok identyfikatora uczestnika warsztatu
 (pomyśleć nad innymi widokami)
 35. Sprawdzać czy discount nie rośnie w następnych progach
-36. Sprawdzać czy limit na warsztaty nie jest większy niż limit konferencji
-37. Generowanie faktury
-28. FindReservation przepisać na funckję
+36. Sprawdzać czy limit na warsztaty nie jest większy niż limit konferencji X
+37. Generowanie faktury (jest już punkt 24)
+38. FindReservation przepisać na funckję
 39. Poprawić liczenie ceny
