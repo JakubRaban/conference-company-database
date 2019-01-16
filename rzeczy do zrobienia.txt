@@ -34,4 +34,17 @@
 Na pewno będziemy potrzebowali reguł usuwania dla konferencji i rezerwacji
 Wykorzystać procedury i funkcje find w bardziej złożonych procedurach (zastąpić selecty)
 30. Uzupełnianie uczestników z rezerwacji konferencji
-31. 
+Uwagi zygmunnt:
+31. Usunąć uniq na telefon
+32. Dodać uniq na:
+- countryname
+- region
+- city
+33. Widok identyfikatora uczestnika konferencji
+34. Widok identyfikatora uczestnika warsztatu
+(pomyśleć nad innymi widokami)
+35. Sprawdzać czy discount nie rośnie w następnych progach
+36. Sprawdzać czy limit na warsztaty nie jest większy niż limit konferencji
+37. Generowanie faktury
+28. FindReservation przepisać na funckję
+39. Poprawić liczenie ceny
