@@ -11,7 +11,7 @@
 11. Zapłać za rezerwację na konferencję X
 12. Dodaj rezerwację na dany dzień X
 13. Dodaj warsztat w dniu X
-14. Dodaj uczestnika do dnia konferencji
+14. Dodaj uczestnika do dnia konferencji X
 15. Dodaj uczestnika do warsztatu X
 16. Nowa rezerwacja na warsztat
 17. Wyszukiwanie

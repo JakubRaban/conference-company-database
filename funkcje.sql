@@ -76,3 +76,23 @@ BEGIN
 	RETURN @number
 END
 go
+
+CREATE FUNCTION FindConferenceDayReservation (@ConferenceName VARCHAR(200), @ConfDayDate DATE, @CustomerEmail VARCHAR(100), @DateOrdered DATE)
+RETURNS INT
+AS
+BEGIN
+	DECLARE @ConferenceDayID INT
+	EXEC dbo.FindConference @ConferenceName = @ConferenceName,                       -- varchar(200)
+	                        @Date = @ConfDayDate,                       -- date
+	                        @ConferenceID = NULL,       -- int
+	                        @ConferenceDayID = @ConferenceDayID OUTPUT -- int
+	DECLARE @ReservationID INT;
+	EXEC dbo.FindReservation @CustomerEmail = @CustomerEmail,                   -- varchar(100)
+	                         @DateOrdered = @DateOrdered,           -- date
+	                         @ReservationID = @ReservationID OUTPUT -- int
+	DECLARE @ConferenceDayReservationID INT =
+	(SELECT DayReservationID
+	FROM dbo.ConferenceDayReservation
+	WHERE ReservationID = @ReservationID AND ConferenceDayID = @ConferenceDayID)
+	RETURN @ConferenceDayReservationID
+END	

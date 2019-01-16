@@ -528,3 +528,81 @@ BEGIN CATCH
 END CATCH
 END
 go 
+
+create PROCEDURE [dbo].[FillReservation]
+	@CustomerEmail VARCHAR(100),
+	@DateOrdered DATE,
+	@ConferenceName VARCHAR(200),
+	@ConfDayDate DATE,
+	@FirstName VARCHAR(30),
+	@LastName VARCHAR(50),
+	@ParticipantPhone VARCHAR(15),
+	@ParticipantEmail VARCHAR(100),
+	@StudentCardNumber VARCHAR(10),
+	@ParticipantID INT OUTPUT
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRANSACTION tr
+		-- Wyszukaj czy w bazie nie ma ju¿ uczestnika o takim mailu
+		DECLARE @FoundID int
+		EXEC @FoundID = dbo.FindParticipantByEmail @Email = @ParticipantEmail -- varchar(100)
+
+		-- SprawdŸ czy dane s¹ pe³ne
+		IF (@FirstName IS NULL OR @LastName IS NULL OR @ParticipantEmail IS NULL) AND @FoundID IS null BEGIN
+			RAISERROR ('Dane niepe³ne', 11,1)
+		END
+
+		-- ZnajdŸ rezerwacjê dnia
+		DECLARE @ReservationID INT
+		EXEC FindConferenceDayReservation @ConferenceName, @ConfDayDate, @CustomerEmail, @DateOrdered, @ReservationID output
+		IF @ReservationID IS NULL BEGIN 
+			RAISERROR ('Nie znaleziono rezerwacji', 11,1)
+		END
+
+		-- ZnajdŸ wszystkie nieuzupe³nione ParticipantID z tej rezerwacji
+		DECLARE @EmptyParticipantIDs TABLE (ParticipantID INT NOT NULL)
+		INSERT INTO @EmptyParticipantIDs (ParticipantID)
+			SELECT cdp.ParticipantID
+			FROM dbo.ConferenceDayParticipants cdp
+			INNER JOIN dbo.Participants ON Participants.ParticipantID = cdp.ParticipantID
+			WHERE ConferenceDayReservationID = @ReservationID AND LastName IS NULL
+		DECLARE @size INT = (SELECT COUNT(*) FROM @EmptyParticipantIDs)
+		
+		-- Wybierz ID które trzeba uzupe³niæ
+		IF @StudentCardNumber IS NULL
+			SET @ParticipantID = (SELECT MIN(ParticipantID) FROM (SELECT * FROM @EmptyParticipantIDs EXCEPT SELECT ParticipantID FROM dbo.Students) t);
+		ELSE
+			SET @ParticipantID = (SELECT MIN(ParticipantID) FROM (SELECT * FROM @EmptyParticipantIDs INTERSECT SELECT ParticipantID FROM dbo.Students) t);
+		
+		IF @ParticipantID IS NULL AND @StudentCardNumber IS NULL RAISERROR ('Ju¿ nie ma miejsc dla doros³ych',11,1)
+		IF @ParticipantID IS NULL AND @StudentCardNumber IS NOT NULL RAISERROR ('Ju¿ nie ma miejsc dla studentów',11,1)
+
+		-- Jeœli jest jeszcze nieuzupe³niona rezerwacja
+		IF @ParticipantID IS NOT NULL BEGIN 
+			-- Jeœli ju¿ jest uczestnik o takim mailu
+			IF @FoundID IS NOT NULL BEGIN
+				UPDATE ConferenceDayParticipants
+					SET ParticipantID = @FoundID
+					WHERE ParticipantID = @ParticipantID AND ConferenceDayReservationID = @ReservationID
+			END ELSE BEGIN 
+				UPDATE dbo.Participants
+					SET FirstName = @FirstName, LastName = @LastName, Email = @ParticipantEmail, Phone = @ParticipantPhone 
+					WHERE ParticipantID = @ParticipantID
+				UPDATE dbo.Students
+					SET StudentCardNumber = @StudentCardNumber
+					WHERE ParticipantID = @ParticipantID
+				DECLARE @CompanyID INT
+				DECLARE @NIP CHAR(10) = (SELECT NIP FROM dbo.Companies WHERE Email = @CustomerEmail)
+				EXEC dbo.BoundParticipantWithCompany @Email = @ParticipantEmail, -- varchar(100)
+				                                     @NIP = @NIP   -- char(10)
+			END 
+		END
+		
+	COMMIT TRANSACTION tr
+END TRY
+BEGIN CATCH
+	PRINT ERROR_MESSAGE()
+	ROLLBACK TRAN tr
+END CATCH
+END
