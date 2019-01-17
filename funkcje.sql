@@ -95,4 +95,54 @@ BEGIN
 	FROM dbo.ConferenceDayReservation
 	WHERE ReservationID = @ReservationID AND ConferenceDayID = @ConferenceDayID)
 	RETURN @ConferenceDayReservationID
-END	
+END
+GO
+
+CREATE FUNCTION WorkshopSeatsLimit(@WorkshopID INT)
+RETURNS INT
+AS
+BEGIN
+	DECLARE @Limit INT = (SELECT ParticipantsLimit
+						 FROM dbo.ConferenceDayWorkshops
+						 WHERE WorkshopID = @WorkshopID)
+	RETURN @Limit
+END
+GO
+
+CREATE FUNCTION ConferenceDayReservationSize(@ConferenceDayReservationID int)
+RETURNS INT
+AS
+BEGIN
+	DECLARE @Size INT = (SELECT SUM(c.ReservedAdultSeats )+ SUM(c.ReservedAdultSeats)
+						FROM dbo.ConferenceDayReservation c
+						WHERE c.DayReservationID = @ConferenceDayReservationID)
+	RETURN @Size
+END
+GO
+
+CREATE FUNCTION ReservedSeatsForWorkshop(@ConferenceDayWorkshopID int)
+RETURNS int
+BEGIN
+	DECLARE @Sum INT = (SELECT SUM(ReservedSeats)
+						FROM WorkshopReservation
+						WHERE ConferenceDayWorkshopID = @ConferenceDayWorkshopID)
+	RETURN @Sum
+end
+
+alter function FindWorkshop (@Name VARCHAR(200))
+RETURNS INT 
+BEGIN
+	DECLARE @ID INT = (SELECT WorkshopID FROM dbo.Workshops WHERE Name = @Name)
+	RETURN @ID
+END
+GO
+
+CREATE FUNCTION DayReservationTotalSeats(@ConferenceDayReservationID INT)
+RETURNS INT
+BEGIN
+	DECLARE @result INT
+	SELECT @result = SUM(ReservedAdultSeats) + SUM(ReservedStudentSeats)
+	FROM dbo.ConferenceDayReservation cdr
+	WHERE cdr.DayReservationID = @ConferenceDayReservationID
+	RETURN @result
+end
