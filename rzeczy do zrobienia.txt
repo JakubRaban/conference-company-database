@@ -13,7 +13,7 @@
 13. Dodaj warsztat w dniu X
 14. Dodaj uczestnika do dnia konferencji X
 15. Dodaj uczestnika do warsztatu X
-16. Nowa rezerwacja na warsztat
+16. Nowa rezerwacja na warsztat X
 17. Wyszukiwanie
 - firmy (po nipie, nazwie, telefonie) X
 - uczestnika (po imieniu i nazwisku, telefonie, e-mailu) X (zrobiłem bez e-maila)
@@ -33,7 +33,7 @@
 29. Sprawdź cenę rezerwacji (widok z parametrem - funkcja)
 Na pewno będziemy potrzebowali reguł usuwania dla konferencji i rezerwacji
 Wykorzystać procedury i funkcje find w bardziej złożonych procedurach (zastąpić selecty)
-30. Uzupełnianie uczestników z rezerwacji konferencji
+30. Uzupełnianie uczestników z rezerwacji konferencji X
 Uwagi zygmunnt:
 31. Usunąć uniq na telefon
 32. Dodać uniq na:
@@ -45,6 +45,15 @@ Uwagi zygmunnt:
 (pomyśleć nad innymi widokami)
 35. Sprawdzać czy discount nie rośnie w następnych progach
 36. Sprawdzać czy limit na warsztaty nie jest większy niż limit konferencji X
-37. Generowanie faktury (jest już punkt 24)
+37. Dodać constraint żeby rezerwacja dnia nie rezerwowała dnia późniejszego niż data zamówienia
 38. FindReservation przepisać na funckję
 39. Poprawić liczenie ceny
+
+--- WIDOKI (wsadzać ile wlezie)
+1. Identyfikatory dla ludzi
+2. Uczestnicy konferencji
+3. Uczestnicy warsztatów
+4. Dane o (przyszłych?) konferencjach (nazwa, pojemność, dni, ilość zarezerwowanych dorosłych i studentów)
+5. Dane o warsztatach
+6. Faktura
+7. 

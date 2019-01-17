@@ -606,3 +606,63 @@ BEGIN CATCH
 	ROLLBACK TRAN tr
 END CATCH
 END
+
+alter PROCEDURE FindWorkshopInDay
+	@ConferenceName VARCHAR(200),
+	@Date DATE,
+	@WorkshopName VARCHAR(200),
+	@ConferenceDayWorkshopID INT OUTPUT
+AS
+BEGIN
+	DECLARE @WorkshopID INT, @ConferenceDayID INT 
+	EXEC @WorkshopID = FindWorkshop @Name = @WorkshopName -- varchar(200)
+	EXEC dbo.FindConference @ConferenceName = @ConferenceName,                       -- varchar(200)
+	                        @Date = @Date,                       -- date
+	                        @ConferenceID = null,       -- int
+	                        @ConferenceDayID = @ConferenceDayID OUTPUT -- int
+	IF @WorkshopID IS NULL RAISERROR('Nie ma tekiego warsztatu', 11,1)
+	SELECT @ConferenceDayWorkshopID = ConferenceDayWorkshopID
+	FROM dbo.ConferenceDayWorkshops
+	WHERE WorkshopID = @WorkshopID AND ConferenceDayID = @ConferenceDayID
+END
+go
+
+CREATE PROCEDURE NewWorkshopReservation
+	@ConferenceName VARCHAR(200),
+	@ConfDayDate DATE,
+	@WorkshopName VARCHAR(200),
+	@CustomerEmail VARCHAR(100),
+	@DateConferenceOrdered DATE,
+	@SeatsReserved INT
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRAN TR
+		DECLARE @DayReservationID INT, @WorkshopInDayID INT
+		EXEC FindWorkshopInDay @ConferenceName, @ConfDayDate, @WorkshopName, @WorkshopInDayID OUTPUT
+		EXEC dbo.FindConferenceDayReservation @ConferenceName = @ConferenceName,                                            -- varchar(200)
+		                                      @ConfDayDate = @ConfDayDate,                                     -- date
+		                                      @CustomerEmail = @CustomerEmail,                                             -- varchar(100)
+		                                      @DateOrdered = @DateConferenceOrdered,                                     -- date
+		                                      @ConferenceDayReservationID = @DayReservationID OUTPUT -- int
+		IF @DayReservationID IS NULL RAISERROR('Nie znaleziono rezerwacji',11,1)
+		IF @WorkshopInDayID IS NULL RAISERROR ('Nie znaleziono warsztatu',11,1)
+		INSERT INTO dbo.WorkshopReservation
+		(
+		    ConferenceDayWorkshopID,
+		    ConferenceDayReservationID,
+		    ReservedSeats
+		)
+		VALUES
+		(   @WorkshopInDayID, -- ConferenceDayWorkshopID - int
+		    @DayReservationID, -- ConferenceDayReservationID - int
+		    @SeatsReserved  -- ReservedSeats - int
+		    )
+	COMMIT TRAN tr
+END TRY
+BEGIN CATCH
+	PRINT ERROR_MESSAGE()
+	ROLLBACK TRAN tr
+END CATCH
+end
+GO
