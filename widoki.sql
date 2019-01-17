@@ -60,3 +60,23 @@ where datediff(day, cr.dateordered, convert(date, getdate())) > 14 and (
 					   where LastName is null and students.ParticipantID is null
 					   group by cdpp.ConferenceDayReservationID) as t where t.x1 = cdp.ConferenceDayReservationID) > 0)
 go
+
+create view Payments as
+select ReservationID, CompanyName, DateOrdered, DatePaid,
+	dbo.CalculatePriceForReservation( Companies.Phone, DateOrdered) as Price
+from ConferenceReservations
+join Customers
+on ConferenceReservations.CustomerID = Customers.CustomerID
+join Companies
+on Customers.CustomerID = Companies.CompanyID
+union
+select ReservationID, (FirstName + ' ' + LastName), DateOrdered, DatePaid,
+	dbo.CalculatePriceForReservation( Participants.Phone, DateOrdered) as Price
+from ConferenceReservations
+join Customers
+on ConferenceReservations.CustomerID = Customers.CustomerID
+join PrivateCustomers
+on Customers.CustomerID = PrivateCustomers.CustomerID
+join Participants
+on PrivateCustomers.ParticipantID = Participants.ParticipantID
+go

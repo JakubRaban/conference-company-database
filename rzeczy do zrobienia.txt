@@ -20,7 +20,7 @@
 - klienta (jw) X
 - ew. po adresie, mieście itd.
 18. wszyscy Uczestnicy konferencji, warsztatów po id
-19. Widok z płatnościami
+19. Widok z płatnościami X
 20. Konferencje zamówione (więcej niż 2 tygonie temu/ogólnie) bez uzupełnionych uczestników -- chyba X
 21. Konferencje nieopłacone - widok
 22. Usuwanie nieopłaconych w terminie konferencji X
@@ -47,4 +47,4 @@ Uwagi zygmunnt:
 36. Sprawdzać czy limit na warsztaty nie jest większy niż limit konferencji X
 37. Generowanie faktury (jest już punkt 24)
 38. FindReservation przepisać na funckję
-39. Poprawić liczenie ceny
+39. Poprawić liczenie ceny X
