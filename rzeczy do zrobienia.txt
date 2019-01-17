@@ -22,15 +22,15 @@
 18. wszyscy Uczestnicy konferencji, warsztatów po id
 19. Widok z płatnościami X
 20. Konferencje zamówione (więcej niż 2 tygonie temu/ogólnie) bez uzupełnionych uczestników -- chyba X
-21. Konferencje nieopłacone - widok
+21. Konferencje nieopłacone - widok X
 22. Usuwanie nieopłaconych w terminie konferencji X
-23. Klienci posortowani według ilości opłaconych rezerwacji
+23. Klienci posortowani według liczby opłaconych rezerwacji X (To jest zrobione jako pierwszy widok)
 24. Faktura za daną konferencję
-25. Liczba wolnych miejsc na dany warsztat/konferencję
+25. Liczba wolnych miejsc na dany warsztat/konferencję X (Zrobiłem zbiorcze widoki)
 26. (anulowanie konferencji, warsztatu)
 27. Dodaj firmę
 28. Trigger gdy nowa rezerwacja dnia X
-29. Sprawdź cenę rezerwacji (widok z parametrem - funkcja)
+29. Sprawdź cenę rezerwacji X (widok z parametrem - funkcja)
 Na pewno będziemy potrzebowali reguł usuwania dla konferencji i rezerwacji
 Wykorzystać procedury i funkcje find w bardziej złożonych procedurach (zastąpić selecty)
 30. Uzupełnianie uczestników z rezerwacji konferencji X

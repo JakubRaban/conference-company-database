@@ -146,3 +146,15 @@ BEGIN
 	WHERE cdr.DayReservationID = @ConferenceDayReservationID
 	RETURN @result
 end
+go
+
+create function GetNumberOfPaidReservationForCustomer(@Email varchar(100))
+returns int
+begin
+	declare @CustomerID int;
+	exec @CustomerID = FindCustomerByEmail @Email;
+	return (select count(*)
+			from ConferenceReservations
+			where CustomerID = @CustomerID and DatePaid is not null)
+end
+go

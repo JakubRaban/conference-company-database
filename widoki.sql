@@ -63,7 +63,7 @@ go
 
 create view Payments as
 select ReservationID, CompanyName, DateOrdered, DatePaid,
-	dbo.CalculatePriceForReservation( Companies.Phone, DateOrdered) as Price
+	dbo.CalculatePriceForReservation(Companies.Phone, DateOrdered) as Price
 from ConferenceReservations
 join Customers
 on ConferenceReservations.CustomerID = Customers.CustomerID
@@ -71,7 +71,7 @@ join Companies
 on Customers.CustomerID = Companies.CompanyID
 union
 select ReservationID, (FirstName + ' ' + LastName), DateOrdered, DatePaid,
-	dbo.CalculatePriceForReservation( Participants.Phone, DateOrdered) as Price
+	dbo.CalculatePriceForReservation(Participants.Phone, DateOrdered) as Price
 from ConferenceReservations
 join Customers
 on ConferenceReservations.CustomerID = Customers.CustomerID
@@ -80,3 +80,69 @@ on Customers.CustomerID = PrivateCustomers.CustomerID
 join Participants
 on PrivateCustomers.ParticipantID = Participants.ParticipantID
 go
+
+create view UnpaidReservations
+as
+select ReservationID, CompanyName, DateOrdered
+from ConferenceReservations
+join Customers
+on ConferenceReservations.CustomerID = Customers.CustomerID
+join Companies
+on Customers.CustomerID = Companies.CompanyID
+where DatePaid is null
+union
+select ReservationID, (FirstName + ' ' + LastName), DateOrdered
+from ConferenceReservations
+join Customers
+on ConferenceReservations.CustomerID = Customers.CustomerID
+join PrivateCustomers
+on Customers.CustomerID = PrivateCustomers.CustomerID
+join Participants
+on PrivateCustomers.ParticipantID = Participants.ParticipantID
+where DatePaid is null
+go
+
+create view CustomersWithPaidReservations
+as
+select CustomerID, CompanyName as Customer, dbo.GetNumberOfPaidReservationForCustomer(Companies.Email) as PaidReservations
+from Customers
+join Companies
+on Customers.CustomerID = Companies.CompanyID
+union
+select Customers.CustomerID, (FirstName + ' ' + LastName) as Customer,
+dbo.GetNumberOfPaidReservationForCustomer(Participants.Email) as PaidReservations
+from Customers
+join PrivateCustomers
+on Customers.CustomerID = PrivateCustomers.CustomerID
+join Participants
+on PrivateCustomers.ParticipantID = Participants.ParticipantID
+go
+
+create view ConferencesWithAvailablePlaces
+as
+select Conferences.ConferenceID, Name, DayOrdinal as Day,
+	ParticipantsLimit - isnull(sum(ReservedAdultSeats + ReservedStudentSeats), 0) as 'Available Places'
+from Conferences
+join ConferenceDays
+on Conferences.ConferenceID = ConferenceDays.ConferenceID
+left join ConferenceDayReservation
+on ConferenceDays.ConferenceDayID = ConferenceDayReservation.ConferenceDayID
+group by Conferences.ConferenceID, Name, DayOrdinal, ParticipantsLimit
+go
+
+create view WorkshopsWithAvailablePlaces
+as
+select Conferences.ConferenceID, Conferences.Name as 'Conference Name',
+	Date, StartTime, EndTime, Workshops.Name as 'Workshop Name',
+	ConferenceDayWorkshops.ParticipantsLimit - sum(ReservedSeats) as 'Available Places'
+from Conferences
+join ConferenceDays
+on Conferences.ConferenceID = ConferenceDays.ConferenceID
+join ConferenceDayWorkshops
+on ConferenceDays.ConferenceDayID = ConferenceDayWorkshops.ConferenceDayID
+join Workshops
+on ConferenceDayWorkshops.WorkshopID = Workshops.WorkshopID
+left join WorkshopReservation
+on ConferenceDayWorkshops.ConferenceDayWorkshopID = WorkshopReservation.ConferenceDayWorkshopID
+group by Conferences.ConferenceID, Conferences.Name, Date, StartDate, StartTime,
+	EndTime, Workshops.Name, ConferenceDayWorkshops.ParticipantsLimit
