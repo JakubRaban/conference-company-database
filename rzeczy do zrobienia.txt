@@ -43,11 +43,15 @@ Uwagi zygmunnt:
 33. Widok identyfikatora uczestnika konferencji
 34. Widok identyfikatora uczestnika warsztatu
 (pomyśleć nad innymi widokami)
-35. Sprawdzać czy discount nie rośnie w następnych progach
+35. Sprawdzać czy discount nie rośnie w następnych progach (najlepiej check)
 36. Sprawdzać czy limit na warsztaty nie jest większy niż limit konferencji X
-37. Dodać constraint żeby rezerwacja dnia nie rezerwowała dnia późniejszego niż data zamówienia
+37. Dodać constraint żeby rezerwacja dnia nie rezerwowała dnia wcześniejszego niż data zamówienia
 38. FindReservation przepisać na funckję
 39. Poprawić liczenie ceny
+40. Dodawanie uczestnika dnia konferencji do warsztatu X
+41. Najlepiej gdyby warunki na dodawanie progu cenowego przenieść z procedury do checków
+42. Liczenie ile jeszcze miejsc z rezerwacji w warsztacie jest do zapełnienia X
+43. 
 
 --- WIDOKI (wsadzać ile wlezie)
 1. Identyfikatory dla ludzi
