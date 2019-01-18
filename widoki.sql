@@ -60,3 +60,128 @@ where datediff(day, cr.dateordered, convert(date, getdate())) > 14 and (
 					   where LastName is null and students.ParticipantID is null
 					   group by cdpp.ConferenceDayReservationID) as t where t.x1 = cdp.ConferenceDayReservationID) > 0)
 go
+
+create view Payments as
+select ReservationID, CompanyName, DateOrdered, DatePaid,
+	dbo.CalculatePriceForReservation(Companies.Phone, DateOrdered) as Price
+from ConferenceReservations
+join Customers
+on ConferenceReservations.CustomerID = Customers.CustomerID
+join Companies
+on Customers.CustomerID = Companies.CompanyID
+union
+select ReservationID, (FirstName + ' ' + LastName), DateOrdered, DatePaid,
+	dbo.CalculatePriceForReservation(Participants.Phone, DateOrdered) as Price
+from ConferenceReservations
+join Customers
+on ConferenceReservations.CustomerID = Customers.CustomerID
+join PrivateCustomers
+on Customers.CustomerID = PrivateCustomers.CustomerID
+join Participants
+on PrivateCustomers.ParticipantID = Participants.ParticipantID
+go
+
+create view UnpaidReservations
+as
+select ReservationID, CompanyName, DateOrdered
+from ConferenceReservations
+join Customers
+on ConferenceReservations.CustomerID = Customers.CustomerID
+join Companies
+on Customers.CustomerID = Companies.CompanyID
+where DatePaid is null
+union
+select ReservationID, (FirstName + ' ' + LastName), DateOrdered
+from ConferenceReservations
+join Customers
+on ConferenceReservations.CustomerID = Customers.CustomerID
+join PrivateCustomers
+on Customers.CustomerID = PrivateCustomers.CustomerID
+join Participants
+on PrivateCustomers.ParticipantID = Participants.ParticipantID
+where DatePaid is null
+go
+
+create view CustomersWithPaidReservations
+as
+select CustomerID, CompanyName as Customer, dbo.GetNumberOfPaidReservationForCustomer(Companies.Email) as PaidReservations
+from Customers
+join Companies
+on Customers.CustomerID = Companies.CompanyID
+union
+select Customers.CustomerID, (FirstName + ' ' + LastName) as Customer,
+dbo.GetNumberOfPaidReservationForCustomer(Participants.Email) as PaidReservations
+from Customers
+join PrivateCustomers
+on Customers.CustomerID = PrivateCustomers.CustomerID
+join Participants
+on PrivateCustomers.ParticipantID = Participants.ParticipantID
+go
+
+create view ConferencesWithAvailablePlaces
+as
+select Conferences.ConferenceID, Name, DayOrdinal as Day,
+	ParticipantsLimit - isnull(sum(ReservedAdultSeats + ReservedStudentSeats), 0) as 'Available Places'
+from Conferences
+join ConferenceDays
+on Conferences.ConferenceID = ConferenceDays.ConferenceID
+left join ConferenceDayReservation
+on ConferenceDays.ConferenceDayID = ConferenceDayReservation.ConferenceDayID
+group by Conferences.ConferenceID, Name, DayOrdinal, ParticipantsLimit
+go
+
+create view WorkshopsWithAvailablePlaces
+as
+select Conferences.ConferenceID, Conferences.Name as 'Conference Name',
+	Date, StartTime, EndTime, Workshops.Name as 'Workshop Name', Price,
+	ConferenceDayWorkshops.ParticipantsLimit - sum(ReservedSeats) as 'Available Places', Description
+from Conferences
+join ConferenceDays
+on Conferences.ConferenceID = ConferenceDays.ConferenceID
+join ConferenceDayWorkshops
+on ConferenceDays.ConferenceDayID = ConferenceDayWorkshops.ConferenceDayID
+join Workshops
+on ConferenceDayWorkshops.WorkshopID = Workshops.WorkshopID
+left join WorkshopReservation
+on ConferenceDayWorkshops.ConferenceDayWorkshopID = WorkshopReservation.ConferenceDayWorkshopID
+group by Conferences.ConferenceID, Conferences.Name, Date, StartDate, StartTime,
+	EndTime, Workshops.Name, Price, ConferenceDayWorkshops.ParticipantsLimit, Description
+go
+
+create view ConferenceDaysParticipantList
+as
+select Name as 'Conference Name', Date, FirstName, LastName, CompanyName
+from Conferences
+join ConferenceDays
+on Conferences.ConferenceID = ConferenceDays.ConferenceID
+join ConferenceDayReservation
+on ConferenceDays.ConferenceDayID = ConferenceDayReservation.ConferenceDayID
+join ConferenceDayParticipants
+on ConferenceDayReservation.DayReservationID = ConferenceDayParticipants.ConferenceDayReservationID
+join Participants
+on ConferenceDayParticipants.ParticipantID = Participants.ParticipantID
+left join EmployeesOfCompanies
+on Participants.ParticipantID = EmployeesOfCompanies.ParticipantID
+left join Companies
+on EmployeesOfCompanies.CompanyID = Companies.CompanyID
+go
+
+create view WorkshopsParticipantsList
+as
+select Name as 'Workshop Name', Date, StartTime, EndTime, FirstName, LastName, CompanyName
+from ConferenceDays
+join ConferenceDayWorkshops
+on ConferenceDays.ConferenceDayID = ConferenceDayWorkshops.ConferenceDayID
+join Workshops
+on ConferenceDayWorkshops.WorkshopID = Workshops.WorkshopID
+join WorkshopReservation
+on ConferenceDayWorkshops.ConferenceDayWorkshopID = WorkshopReservation.ConferenceDayWorkshopID
+join ConferenceDayParticipants
+on WorkshopReservation.ConferenceDayReservationID = ConferenceDayParticipants.ConferenceDayReservationID
+join Participants
+on ConferenceDayParticipants.ParticipantID = Participants.ParticipantID
+left join EmployeesOfCompanies
+on Participants.ParticipantID = EmployeesOfCompanies.ParticipantID
+left join Companies
+on EmployeesOfCompanies.CompanyID = Companies.CompanyID
+go

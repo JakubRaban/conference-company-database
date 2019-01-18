@@ -20,44 +20,45 @@
 - klienta (jw) X
 - ew. po adresie, mieście itd.
 18. wszyscy Uczestnicy konferencji, warsztatów po id
-19. Widok z płatnościami
+19. Widok z płatnościami X
 20. Konferencje zamówione (więcej niż 2 tygonie temu/ogólnie) bez uzupełnionych uczestników -- chyba X
-21. Konferencje nieopłacone - widok
+21. Konferencje nieopłacone - widok X
 22. Usuwanie nieopłaconych w terminie konferencji X
-23. Klienci posortowani według ilości opłaconych rezerwacji
+23. Klienci posortowani według liczby opłaconych rezerwacji X (To jest zrobione jako pierwszy widok)
 24. Faktura za daną konferencję
-25. Liczba wolnych miejsc na dany warsztat/konferencję
+25. Liczba wolnych miejsc na dany warsztat/konferencję X (Zrobiłem zbiorcze widoki)
 26. (anulowanie konferencji, warsztatu)
-27. Dodaj firmę
+27. Dodaj firmę X
 28. Trigger gdy nowa rezerwacja dnia X
-29. Sprawdź cenę rezerwacji (widok z parametrem - funkcja)
+29. Sprawdź cenę rezerwacji X (widok z parametrem - funkcja)
 Na pewno będziemy potrzebowali reguł usuwania dla konferencji i rezerwacji
 Wykorzystać procedury i funkcje find w bardziej złożonych procedurach (zastąpić selecty)
 30. Uzupełnianie uczestników z rezerwacji konferencji X
 Uwagi zygmunnt:
-31. Usunąć uniq na telefon
+31. Usunąć uniq na telefon X (usunąłem tylko dla uczestnika, jeśli nam powie że dla firmy też nie może być unikalny to jej nasram na ryj)
 32. Dodać uniq na:
 - countryname X
 - region X
 - city (o tym chyba nie mówiła, nazwy miast mogą się powtarzać między województwami)
-33. Widok identyfikatora uczestnika konferencji
-34. Widok identyfikatora uczestnika warsztatu
+33. Widok identyfikatorów uczestników konferencji X
+34. Widok identyfikatorów uczestników warsztatu X
 (pomyśleć nad innymi widokami)
 35. Sprawdzać czy discount nie rośnie w następnych progach (najlepiej check)
 36. Sprawdzać czy limit na warsztaty nie jest większy niż limit konferencji X
 37. Dodać constraint żeby rezerwacja dnia nie rezerwowała dnia wcześniejszego niż data zamówienia
 38. FindReservation przepisać na funckję
-39. Poprawić liczenie ceny
+<<<<<<< HEAD
+39. Poprawić liczenie ceny X
 40. Dodawanie uczestnika dnia konferencji do warsztatu X
 41. Najlepiej gdyby warunki na dodawanie progu cenowego przenieść z procedury do checków
 42. Liczenie ile jeszcze miejsc z rezerwacji w warsztacie jest do zapełnienia X
 43. 
 
 --- WIDOKI (wsadzać ile wlezie)
-1. Identyfikatory dla ludzi
-2. Uczestnicy konferencji
-3. Uczestnicy warsztatów
+1. Identyfikatory dla ludzi (czym to się różni od 2. i 3.?)
+2. Uczestnicy konferencji X (to już jest w 33. w sumie)
+3. Uczestnicy warsztatów X (j.w. ale 34.)
 4. Dane o (przyszłych?) konferencjach (nazwa, pojemność, dni, ilość zarezerwowanych dorosłych i studentów)
-5. Dane o warsztatach
+5. Dane o warsztatach X
 6. Faktura
-7. 
+7.
