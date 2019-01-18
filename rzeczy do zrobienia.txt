@@ -47,7 +47,6 @@ Uwagi zygmunnt:
 36. Sprawdzać czy limit na warsztaty nie jest większy niż limit konferencji X
 37. Dodać constraint żeby rezerwacja dnia nie rezerwowała dnia wcześniejszego niż data zamówienia
 38. FindReservation przepisać na funckję
-<<<<<<< HEAD
 39. Poprawić liczenie ceny X
 40. Dodawanie uczestnika dnia konferencji do warsztatu X
 41. Najlepiej gdyby warunki na dodawanie progu cenowego przenieść z procedury do checków
@@ -55,7 +54,8 @@ Uwagi zygmunnt:
 43. 
 
 --- WIDOKI (wsadzać ile wlezie)
-1. Identyfikatory dla ludzi (czym to się różni od 2. i 3.?)
+1. Identyfikatory dla ludzi (czym to się różni od 2. i 3.?) // w sumie to nie wiem dokładnie, ale u zygmunt są 
+dwa osobne wymagania -- listy osobowe oraz identyfikatory, tzn. wydaje mi się że identyfikatory nie zawierają daty
 2. Uczestnicy konferencji X (to już jest w 33. w sumie)
 3. Uczestnicy warsztatów X (j.w. ale 34.)
 4. Dane o (przyszłych?) konferencjach (nazwa, pojemność, dni, ilość zarezerwowanych dorosłych i studentów)
