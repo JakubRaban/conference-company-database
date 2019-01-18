@@ -133,8 +133,8 @@ go
 create view WorkshopsWithAvailablePlaces
 as
 select Conferences.ConferenceID, Conferences.Name as 'Conference Name',
-	Date, StartTime, EndTime, Workshops.Name as 'Workshop Name',
-	ConferenceDayWorkshops.ParticipantsLimit - sum(ReservedSeats) as 'Available Places'
+	Date, StartTime, EndTime, Workshops.Name as 'Workshop Name', Price,
+	ConferenceDayWorkshops.ParticipantsLimit - sum(ReservedSeats) as 'Available Places', Description
 from Conferences
 join ConferenceDays
 on Conferences.ConferenceID = ConferenceDays.ConferenceID
@@ -145,4 +145,43 @@ on ConferenceDayWorkshops.WorkshopID = Workshops.WorkshopID
 left join WorkshopReservation
 on ConferenceDayWorkshops.ConferenceDayWorkshopID = WorkshopReservation.ConferenceDayWorkshopID
 group by Conferences.ConferenceID, Conferences.Name, Date, StartDate, StartTime,
-	EndTime, Workshops.Name, ConferenceDayWorkshops.ParticipantsLimit
+	EndTime, Workshops.Name, Price, ConferenceDayWorkshops.ParticipantsLimit, Description
+go
+
+create view ConferenceDaysParticipantList
+as
+select Name as 'Conference Name', Date, FirstName, LastName, CompanyName
+from Conferences
+join ConferenceDays
+on Conferences.ConferenceID = ConferenceDays.ConferenceID
+join ConferenceDayReservation
+on ConferenceDays.ConferenceDayID = ConferenceDayReservation.ConferenceDayID
+join ConferenceDayParticipants
+on ConferenceDayReservation.DayReservationID = ConferenceDayParticipants.ConferenceDayReservationID
+join Participants
+on ConferenceDayParticipants.ParticipantID = Participants.ParticipantID
+left join EmployeesOfCompanies
+on Participants.ParticipantID = EmployeesOfCompanies.ParticipantID
+left join Companies
+on EmployeesOfCompanies.CompanyID = Companies.CompanyID
+go
+
+create view WorkshopsParticipantsList
+as
+select Name as 'Workshop Name', Date, StartTime, EndTime, FirstName, LastName, CompanyName
+from ConferenceDays
+join ConferenceDayWorkshops
+on ConferenceDays.ConferenceDayID = ConferenceDayWorkshops.ConferenceDayID
+join Workshops
+on ConferenceDayWorkshops.WorkshopID = Workshops.WorkshopID
+join WorkshopReservation
+on ConferenceDayWorkshops.ConferenceDayWorkshopID = WorkshopReservation.ConferenceDayWorkshopID
+join ConferenceDayParticipants
+on WorkshopReservation.ConferenceDayReservationID = ConferenceDayParticipants.ConferenceDayReservationID
+join Participants
+on ConferenceDayParticipants.ParticipantID = Participants.ParticipantID
+left join EmployeesOfCompanies
+on Participants.ParticipantID = EmployeesOfCompanies.ParticipantID
+left join Companies
+on EmployeesOfCompanies.CompanyID = Companies.CompanyID
+go

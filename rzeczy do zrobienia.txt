@@ -40,8 +40,8 @@ Uwagi zygmunnt:
 - countryname X
 - region X
 - city (o tym chyba nie mówiła, nazwy miast mogą się powtarzać między województwami)
-33. Widok identyfikatora uczestnika konferencji
-34. Widok identyfikatora uczestnika warsztatu
+33. Widok identyfikatorów uczestników konferencji X
+34. Widok identyfikatorów uczestników warsztatu X
 (pomyśleć nad innymi widokami)
 35. Sprawdzać czy discount nie rośnie w następnych progach
 36. Sprawdzać czy limit na warsztaty nie jest większy niż limit konferencji X
@@ -50,10 +50,10 @@ Uwagi zygmunnt:
 39. Poprawić liczenie ceny X
 
 --- WIDOKI (wsadzać ile wlezie)
-1. Identyfikatory dla ludzi
-2. Uczestnicy konferencji
-3. Uczestnicy warsztatów
+1. Identyfikatory dla ludzi (czym to się różni od 2. i 3.?)
+2. Uczestnicy konferencji X (to już jest w 33. w sumie)
+3. Uczestnicy warsztatów X (j.w. ale 34.)
 4. Dane o (przyszłych?) konferencjach (nazwa, pojemność, dni, ilość zarezerwowanych dorosłych i studentów)
-5. Dane o warsztatach
+5. Dane o warsztatach X
 6. Faktura
 7.
