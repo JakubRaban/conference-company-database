@@ -28,14 +28,14 @@
 24. Faktura za daną konferencję
 25. Liczba wolnych miejsc na dany warsztat/konferencję X (Zrobiłem zbiorcze widoki)
 26. (anulowanie konferencji, warsztatu)
-27. Dodaj firmę
+27. Dodaj firmę X
 28. Trigger gdy nowa rezerwacja dnia X
 29. Sprawdź cenę rezerwacji X (widok z parametrem - funkcja)
 Na pewno będziemy potrzebowali reguł usuwania dla konferencji i rezerwacji
 Wykorzystać procedury i funkcje find w bardziej złożonych procedurach (zastąpić selecty)
 30. Uzupełnianie uczestników z rezerwacji konferencji X
 Uwagi zygmunnt:
-31. Usunąć uniq na telefon
+31. Usunąć uniq na telefon X (usunąłem tylko dla uczestnika, jeśli nam powie że dla firmy też nie może być unikalny to jej nasram na ryj)
 32. Dodać uniq na:
 - countryname X
 - region X
