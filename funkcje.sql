@@ -222,4 +222,27 @@ begin
 end
 go
 
-create function LastPriceStep
+create function GetConferenceStartDate(@ConferenceID int)
+returns date
+as
+begin
+	return (select StartDate from Conferences where ConferenceID = @ConferenceID)
+end
+go
+
+create function GetLatestDiscount(@ConferenceID int)
+returns real
+as
+begin
+	declare @discount real;
+	if exists (select *
+			   from ConferencePricetables
+			   where ConferenceID = @ConferenceID)
+		set @discount = (select min(DiscountRate)
+						from ConferencePricetables
+						where ConferenceID = @ConferenceID)
+	else
+		set @discount = 1
+	return @discount
+end
+go
