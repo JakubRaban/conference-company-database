@@ -214,10 +214,12 @@ begin
 	exec @BasePrice = dbo.BaseDayPrice @ReservationID;
 	exec @TimeDiscount = dbo.DiscountForReservation @DateOrdered, @ReservationID;
 	exec @StudentDiscount = dbo.StudentDiscountForReservation @ReservationID;
-	set @AdultPrice = @BasePrice * @TimeDiscount
-	set @StudentPrice = @AdultPrice * @StudentDiscount
+	set @AdultPrice = @BasePrice * (1- @TimeDiscount)
+	set @StudentPrice = @AdultPrice * (1 - @StudentDiscount)
 	insert into @Prices (ConferenceID, AdultPrice, StudentPrice)
 	values (@ConferenceID, @AdultPrice, @StudentPrice)
 	return
 end
 go
+
+create function LastPriceStep
