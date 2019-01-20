@@ -54,6 +54,8 @@ Uwagi zygmunnt:
 43. 
 
 --- WIDOKI (wsadzać ile wlezie)
+----- calculatePriceForReservation zdaje się ciągle nie działać bo w widoku payments cena dla rezerwacji AGH jest null. Tak jeszcze dla testu ta cena (ręcznie obliczona) powinna wynieść 87 zł -- 
+12dorosłych*50zł/os*(1-0,88)+5studentów*50zł*(1-0,5)*(1-0,88) gdzie 0,88--zniżka za datę zamówienia, 0,5 zniżka studencka
 1. Identyfikatory dla ludzi (czym to się różni od 2. i 3.?) // w sumie to nie wiem dokładnie, ale u zygmunt są 
 dwa osobne wymagania -- listy osobowe oraz identyfikatory, tzn. wydaje mi się że identyfikatory nie zawierają daty
 2. Uczestnicy konferencji X (to już jest w 33. w sumie)
