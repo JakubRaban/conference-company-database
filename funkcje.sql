@@ -131,3 +131,118 @@ begin
 			where CustomerID = @CustomerID and DatePaid is not null)
 end
 go
+
+create function BaseDayPrice(@ReservationID int)
+returns money
+as
+begin
+	declare @ConferenceID int;
+	set @ConferenceID = (select ConferenceID
+						 from ConferenceDays cd
+						 join ConferenceDayReservation cdr
+						 on cd.ConferenceDayID = cdr.ConferenceDayID
+						 where cdr.ReservationID = @ReservationID
+						 group by ConferenceID);
+	return (select BasePriceForDay
+			from Conferences
+			where ConferenceID = @ConferenceID)
+end
+go
+
+create function DiscountForReservation(@DateOrdered date, @ReservationID int)
+returns real
+as
+begin
+	declare @ConferenceID int,
+			@TimeDiscount real;
+	set @ConferenceID = (select ConferenceID
+						 from ConferenceDays cd
+						 join ConferenceDayReservation cdr
+						 on cd.ConferenceDayID = cdr.ConferenceDayID
+						 where cdr.ReservationID = @ReservationID
+						 group by ConferenceID);
+	if not exists (select DiscountRate
+				   from ConferencePricetables cp
+			       where cp.ConferenceID = @ConferenceID and @DateOrdered between cp.PriceStartsOn and cp.PriceEndsOn)
+		set @TimeDiscount = 0
+	else
+		set @TimeDiscount =  (select DiscountRate
+							  from ConferencePricetables cp
+							  where cp.ConferenceID = @ConferenceID and @DateOrdered between cp.PriceStartsOn and cp.PriceEndsOn)
+	return @TimeDiscount
+end
+go
+
+create function StudentDiscountForReservation(@ReservationID int)
+returns real
+as
+begin
+	declare @ConferenceID int;
+	set @ConferenceID = (select ConferenceID
+						 from ConferenceDays cd
+						 join ConferenceDayReservation cdr
+						 on cd.ConferenceDayID = cdr.ConferenceDayID
+						 where cdr.ReservationID = @ReservationID
+						 group by ConferenceID);
+	return (select StudentDiscount
+			from Conferences
+			where ConferenceID = @ConferenceID);
+end
+go
+
+create function ReservationPrices(@DateOrdered date, @ReservationID int)
+returns @Prices table
+(
+	ConferenceID int,
+	AdultPrice money,
+	StudentPrice money
+)
+as
+begin
+	declare @ConferenceID int,
+			@BasePrice money,
+			@TimeDiscount real,
+			@StudentDiscount real,
+			@AdultPrice money,
+			@StudentPrice money;
+	set @ConferenceID = (select ConferenceID
+						 from ConferenceDays cd
+						 join ConferenceDayReservation cdr
+						 on cd.ConferenceDayID = cdr.ConferenceDayID
+						 where cdr.ReservationID = @ReservationID
+						 group by ConferenceID);
+	exec @BasePrice = dbo.BaseDayPrice @ReservationID;
+	exec @TimeDiscount = dbo.DiscountForReservation @DateOrdered, @ReservationID;
+	exec @StudentDiscount = dbo.StudentDiscountForReservation @ReservationID;
+	set @AdultPrice = @BasePrice * (1- @TimeDiscount)
+	set @StudentPrice = @AdultPrice * (1 - @StudentDiscount)
+	insert into @Prices (ConferenceID, AdultPrice, StudentPrice)
+	values (@ConferenceID, @AdultPrice, @StudentPrice)
+	return
+end
+go
+
+create function GetConferenceStartDate(@ConferenceID int)
+returns date
+as
+begin
+	return (select StartDate from Conferences where ConferenceID = @ConferenceID)
+end
+go
+
+create function GetLatestDiscount(@ConferenceID int)
+returns real
+as
+begin
+	declare @discount real;
+	if exists (select *
+			   from ConferencePricetables
+			   where ConferenceID = @ConferenceID)
+		set @discount = (select min(DiscountRate)
+						from ConferencePricetables
+						where ConferenceID = @ConferenceID)
+	else
+		set @discount = 1
+	return @discount
+end
+go
