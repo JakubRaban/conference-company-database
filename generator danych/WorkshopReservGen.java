@@ -19,7 +19,7 @@ public class Shuffler {
 
         Random r = new Random();
 
-        for(int i = 0; i < 5000; i++) {
+        for(int i = 0; i < 50000; i++) {
             int seats = r.nextInt(20) + 1;
             int index = r.nextInt(11930);
             int reservationId = reservationIds.get(index);
